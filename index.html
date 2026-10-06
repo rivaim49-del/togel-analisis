@@ -3,48 +3,144 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Analisis Togel Rumus Gambar</title>
 
 <style>
+
+*{
+    box-sizing:border-box;
+}
+
 body{
-    font-family: Arial, sans-serif;
+    font-family:Arial,sans-serif;
     background:#f5f5f5;
     padding:20px;
+    margin:0;
 }
+
 .container{
     max-width:1000px;
     margin:auto;
     background:white;
     padding:20px;
-    border-radius:10px;
-    box-shadow:0 0 10px rgba(0,0,0,.1);
+    border-radius:12px;
+    box-shadow:0 0 12px rgba(0,0,0,.12);
 }
+
 h2{
     text-align:center;
+    margin-top:0;
+    color:#222;
 }
+
+.input-area{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    justify-content:center;
+    margin-bottom:20px;
+}
+
 input{
-    padding:10px;
-    width:200px;
+    padding:12px;
+    width:220px;
+    border:1px solid #ccc;
+    border-radius:6px;
+    font-size:16px;
+    text-align:center;
+    letter-spacing:3px;
 }
+
 button{
-    padding:10px 20px;
+    padding:12px 22px;
+    border:none;
+    border-radius:6px;
+    background:#1769aa;
+    color:white;
+    font-weight:bold;
     cursor:pointer;
 }
+
+button:hover{
+    background:#0d4f82;
+}
+
 .box{
     margin-top:20px;
     padding:15px;
     background:#eef5ff;
     border-radius:8px;
+    border-left:5px solid #1769aa;
 }
+
+.box h3{
+    margin-top:0;
+    color:#1769aa;
+}
+
+.angka{
+    font-size:22px;
+    font-weight:bold;
+    letter-spacing:4px;
+    word-break:break-word;
+}
+
 table{
     width:100%;
     border-collapse:collapse;
+    margin-top:10px;
 }
+
+th{
+    background:#1769aa;
+    color:white;
+}
+
 td,th{
     border:1px solid #ddd;
-    padding:8px;
+    padding:9px;
     text-align:center;
 }
+
+.info{
+    color:#555;
+    font-size:14px;
+    margin-top:5px;
+}
+
+.error{
+    background:#ffeaea;
+    color:#b00020;
+    padding:12px;
+    border-radius:6px;
+    margin-top:15px;
+}
+
+@media(max-width:600px){
+
+    body{
+        padding:10px;
+    }
+
+    .container{
+        padding:15px;
+    }
+
+    input{
+        width:100%;
+    }
+
+    button{
+        width:100%;
+    }
+
+    .angka{
+        font-size:18px;
+    }
+
+}
+
 </style>
 </head>
 
@@ -55,154 +151,624 @@ td,th{
 <h2>ANALISIS TOGEL RUMUS GAMBAR</h2>
 
 <p>Masukkan Result 4D:</p>
-<input type="text" id="result" maxlength="4" placeholder="Contoh: 8690">
-<button onclick="analisa()">ANALISA</button>
+
+<div class="input-area">
+
+<input
+    type="text"
+    id="result"
+    maxlength="4"
+    inputmode="numeric"
+    placeholder="Contoh: 8690"
+>
+
+<button onclick="analisa()">
+    ANALISA
+</button>
+
+</div>
 
 <div id="hasil"></div>
 
 </div>
 
+
 <script>
 
+/* =====================================================
+   RUMUS PASANGAN
+===================================================== */
+
 const rumus = {
-ML:[[0,1],[2,5],[3,8],[4,7],[6,9]],
-MB:[[0,8],[2,6],[3,9],[4,5],[7,1]],
-INDX:[[0,5],[2,7],[3,8],[4,9],[1,6]],
-TY:[[0,7],[2,9],[3,6],[4,1],[5,8]],
-MO:[[0,6],[1,5],[2,8],[3,7],[4,9]],
-M9:[[0,9],[1,8],[2,7],[3,6],[4,5]]
+
+    ML:[
+        [0,1],
+        [2,5],
+        [3,8],
+        [4,7],
+        [6,9]
+    ],
+
+    MB:[
+        [0,8],
+        [2,6],
+        [3,9],
+        [4,5],
+        [7,1]
+    ],
+
+    INDX:[
+        [0,5],
+        [2,7],
+        [3,8],
+        [4,9],
+        [1,6]
+    ],
+
+    TY:[
+        [0,7],
+        [2,9],
+        [3,6],
+        [4,1],
+        [5,8]
+    ],
+
+    MO:[
+        [0,6],
+        [1,5],
+        [2,8],
+        [3,7],
+        [4,9]
+    ],
+
+    M9:[
+        [0,9],
+        [1,8],
+        [2,7],
+        [3,6],
+        [4,5]
+    ]
+
 };
+
+
+/* =====================================================
+   CARI PASANGAN DIGIT
+===================================================== */
 
 function cariPasangan(angka){
 
-let hasil=[];
+    let hasil = [];
 
-for(let key in rumus){
+    for(let key in rumus){
 
-rumus[key].forEach(pair=>{
+        rumus[key].forEach(pair => {
 
-if(pair.includes(Number(angka))){
-hasil.push(pair[0]);
-hasil.push(pair[1]);
+            if(pair.includes(Number(angka))){
+
+                hasil.push(pair[0]);
+                hasil.push(pair[1]);
+
+            }
+
+        });
+
+    }
+
+    return [...new Set(hasil)];
+
 }
 
-});
+
+/* =====================================================
+   MEMBUAT RANKING DIGIT
+===================================================== */
+
+function buatRanking(angkaString){
+
+    let kandidat = [];
+
+    for(let digit of angkaString){
+
+        kandidat.push(
+            ...cariPasangan(digit)
+        );
+
+    }
+
+    let frek = {};
+
+    for(let n of kandidat){
+
+        frek[n] = (frek[n] || 0) + 1;
+
+    }
+
+    return Object.entries(frek)
+        .sort((a,b) => {
+
+            if(b[1] !== a[1]){
+                return b[1] - a[1];
+            }
+
+            return Number(a[0]) - Number(b[0]);
+
+        });
 
 }
 
-return [...new Set(hasil)];
+
+/* =====================================================
+   AMBIL 6 DIGIT
+===================================================== */
+
+function ambil6(ranking){
+
+    let hasil = ranking
+        .slice(0,6)
+        .map(x => x[0]);
+
+    /*
+       Jika hasil kurang dari 6 digit,
+       tambahkan digit yang belum ada.
+    */
+
+    for(let i=0;i<=9 && hasil.length<6;i++){
+
+        if(!hasil.includes(String(i))){
+
+            hasil.push(String(i));
+
+        }
+
+    }
+
+    return hasil.slice(0,6);
+
 }
+
+
+/* =====================================================
+   BUAT TOP 4D
+===================================================== */
+
+function buatTop4D(bbfs){
+
+    let hasil = [];
+
+    /*
+       Membuat kombinasi 4D unik
+       dari BBFS 6 digit.
+    */
+
+    for(let a=0;a<bbfs.length;a++){
+
+        for(let b=0;b<bbfs.length;b++){
+
+            for(let c=0;c<bbfs.length;c++){
+
+                for(let d=0;d<bbfs.length;d++){
+
+                    if(
+                        a !== b &&
+                        a !== c &&
+                        a !== d &&
+                        b !== c &&
+                        b !== d &&
+                        c !== d
+                    ){
+
+                        hasil.push(
+                            bbfs[a] +
+                            bbfs[b] +
+                            bbfs[c] +
+                            bbfs[d]
+                        );
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    }
+
+    /*
+       Batasi menjadi 20 kombinasi
+    */
+
+    return hasil.slice(0,20);
+
+}
+
+
+/* =====================================================
+   FUNGSI ANALISA
+===================================================== */
 
 function analisa(){
 
-let result=document.getElementById("result").value;
+    let input =
+        document.getElementById("result");
 
-if(result.length!=4){
-alert("Masukkan 4 digit.");
-return;
+    let result =
+        input.value.trim();
+
+
+    /* Validasi */
+
+    if(!/^\d{4}$/.test(result)){
+
+        document.getElementById("hasil").innerHTML = `
+
+            <div class="error">
+
+                Masukkan tepat 4 digit angka.
+
+                <br><br>
+
+                Contoh:
+                <b>8690</b>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    /* =================================================
+       RANKING UTAMA
+    ================================================= */
+
+    let ranking =
+        buatRanking(result);
+
+
+    /* BBFS */
+
+    let bbfs =
+        ambil6(ranking);
+
+
+    /* Angka Tarung Utama */
+
+    let tarung =
+        [...bbfs];
+
+
+    /* =================================================
+       PEMBAGIAN POSISI
+    =================================================
+
+       AS     = 2 digit pertama
+       COP    = digit ke-2 dan ke-3
+       KEPALA = digit pertama
+       EKOR   = digit terakhir
+    */
+
+
+    let as =
+        result.substring(0,2);
+
+
+    let cop =
+        result.substring(1,3);
+
+
+    let kepala =
+        result.substring(0,1);
+
+
+    let ekor =
+        result.substring(3,4);
+
+
+    /* =================================================
+       RANKING PER POSISI
+    ================================================= */
+
+    let rankingAS =
+        buatRanking(as);
+
+
+    let rankingCOP =
+        buatRanking(cop);
+
+
+    let rankingKepala =
+        buatRanking(kepala);
+
+
+    let rankingEkor =
+        buatRanking(ekor);
+
+
+    /* =================================================
+       6 DIGIT SETIAP POSISI
+    ================================================= */
+
+    let tarungAS =
+        ambil6(rankingAS);
+
+
+    let tarungCOP =
+        ambil6(rankingCOP);
+
+
+    let tarungKepala =
+        ambil6(rankingKepala);
+
+
+    let tarungEkor =
+        ambil6(rankingEkor);
+
+
+    /* =================================================
+       TOP 4D
+    ================================================= */
+
+    let top4d =
+        buatTop4D(bbfs);
+
+
+    /* =================================================
+       TAMPILKAN HASIL
+    ================================================= */
+
+    document.getElementById("hasil").innerHTML = `
+
+
+    <!-- RESULT -->
+
+    <div class="box">
+
+        <h3>Result Input</h3>
+
+        <div class="angka">
+            ${result}
+        </div>
+
+    </div>
+
+
+    <!-- BBFS -->
+
+    <div class="box">
+
+        <h3>BBFS 6 Digit</h3>
+
+        <div class="angka">
+            ${bbfs.join(" ")}
+        </div>
+
+        <div class="info">
+            6 digit utama berdasarkan frekuensi pasangan rumus.
+        </div>
+
+    </div>
+
+
+    <!-- ANGKA TARUNG -->
+
+    <div class="box">
+
+        <h3>Angka Tarung 6 Digit</h3>
+
+        <div class="angka">
+            ${tarung.join(" × ")}
+        </div>
+
+    </div>
+
+
+    <!-- AS -->
+
+    <div class="box">
+
+        <h3>Angka Tarung AS 6 Digit</h3>
+
+        <div class="angka">
+            ${tarungAS.join(" × ")}
+        </div>
+
+        <div class="info">
+            AS = 2 digit pertama (${as})
+        </div>
+
+    </div>
+
+
+    <!-- COP -->
+
+    <div class="box">
+
+        <h3>Angka Tarung COP 6 Digit</h3>
+
+        <div class="angka">
+            ${tarungCOP.join(" × ")}
+        </div>
+
+        <div class="info">
+            COP = digit ke-2 dan ke-3 (${cop})
+        </div>
+
+    </div>
+
+
+    <!-- KEPALA -->
+
+    <div class="box">
+
+        <h3>Angka Tarung KEPALA 6 Digit</h3>
+
+        <div class="angka">
+            ${tarungKepala.join(" × ")}
+        </div>
+
+        <div class="info">
+            KEPALA = digit pertama (${kepala})
+        </div>
+
+    </div>
+
+
+    <!-- EKOR -->
+
+    <div class="box">
+
+        <h3>Angka Tarung EKOR 6 Digit</h3>
+
+        <div class="angka">
+            ${tarungEkor.join(" × ")}
+        </div>
+
+        <div class="info">
+            EKOR = digit terakhir (${ekor})
+        </div>
+
+    </div>
+
+
+    <!-- TOP 4D -->
+
+    <div class="box">
+
+        <h3>Top 4D</h3>
+
+        <table>
+
+            <tr>
+                <th>No</th>
+                <th>Prediksi 4D</th>
+            </tr>
+
+            ${
+                top4d.map((n,i) => `
+
+                    <tr>
+
+                        <td>
+                            ${i+1}
+                        </td>
+
+                        <td>
+                            <b>${n}</b>
+                        </td>
+
+                    </tr>
+
+                `).join("")
+            }
+
+        </table>
+
+    </div>
+
+
+    <!-- FREKUENSI -->
+
+    <div class="box">
+
+        <h3>Frekuensi Digit</h3>
+
+        <table>
+
+            <tr>
+                <th>Ranking</th>
+                <th>Digit</th>
+                <th>Skor</th>
+            </tr>
+
+            ${
+                ranking.map((x,i) => `
+
+                    <tr>
+
+                        <td>
+                            ${i+1}
+                        </td>
+
+                        <td>
+                            <b>${x[0]}</b>
+                        </td>
+
+                        <td>
+                            ${x[1]}
+                        </td>
+
+                    </tr>
+
+                `).join("")
+            }
+
+        </table>
+
+    </div>
+
+
+    <!-- RUMUS -->
+
+    <div class="box">
+
+        <h3>Rumus Yang Digunakan</h3>
+
+        <table>
+
+            <tr>
+                <th>Rumus</th>
+                <th>Pasangan</th>
+            </tr>
+
+            ${
+                Object.entries(rumus).map(([nama,pasangan]) => `
+
+                    <tr>
+
+                        <td>
+                            <b>${nama}</b>
+                        </td>
+
+                        <td>
+                            ${
+                                pasangan
+                                .map(p => p.join("-"))
+                                .join(" &nbsp; ")
+                            }
+                        </td>
+
+                    </tr>
+
+                `).join("")
+            }
+
+        </table>
+
+    </div>
+
+    `;
+
 }
 
-let kandidat=[];
 
-for(let digit of result){
-kandidat.push(...cariPasangan(digit));
-}
+/* =====================================================
+   ENTER UNTUK ANALISA
+===================================================== */
 
-let frek={};
+document.getElementById("result")
+.addEventListener("keypress", function(event){
 
-for(let n of kandidat){
-frek[n]=(frek[n]||0)+1;
-}
+    if(event.key === "Enter"){
 
-let ranking=Object.entries(frek)
-.sort((a,b)=>b[1]-a[1]);
+        analisa();
 
-let bbfs=ranking
-.slice(0,6)
-.map(x=>x[0]);
+    }
 
-let tarung=ranking
-.slice(0,6)
-.map(x=>x[0]);
-
-let top4d=[];
-
-for(let i=0;i<10;i++){
-
-let kombinasi="";
-
-for(let j=0;j<4;j++){
-
-kombinasi+=bbfs[
-Math.floor(Math.random()*bbfs.length)
-];
-
-}
-
-top4d.push(kombinasi);
-}
-
-document.getElementById("hasil").innerHTML=`
-
-<div class="box">
-
-<h3>BBFS 6 Digit</h3>
-<b>${bbfs.join(" ")}</b>
-
-</div>
-
-<div class="box">
-
-<h3>Angka Tarung 6 Digit</h3>
-<b>${tarung.join(" x ")}</b>
-
-</div>
-
-<div class="box">
-
-<h3>Top 4D</h3>
-
-<table>
-<tr>
-<th>No</th>
-<th>Prediksi 4D</th>
-</tr>
-
-${top4d.map((n,i)=>`
-<tr>
-<td>${i+1}</td>
-<td>${n}</td>
-</tr>
-`).join("")}
-
-</table>
-
-</div>
-
-<div class="box">
-
-<h3>Frekuensi Digit</h3>
-
-<table>
-<tr>
-<th>Digit</th>
-<th>Skor</th>
-</tr>
-
-${ranking.map(x=>`
-<tr>
-<td>${x[0]}</td>
-<td>${x[1]}</td>
-</tr>
-`).join("")}
-
-</table>
-
-</div>
-
-`;
-
-}
+});
 
 </script>
 
